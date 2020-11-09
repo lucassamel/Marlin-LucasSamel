@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Web.Http;
+using System.Web.Mvc;
 
 namespace Api.Controllers
 {
@@ -17,6 +18,7 @@ namespace Api.Controllers
         private data.MarlinBdEntities _context;
 
         // GET api/turmas
+        //Lista Turmas
         public List<Model.Turma> Get()
         {
             _context = new data.MarlinBdEntities();
@@ -54,6 +56,7 @@ namespace Api.Controllers
         }
 
         // GET api/turmas/5
+        //Lista turma por Id
         public Model.Turma Get(int id)
         {
             _context = new data.MarlinBdEntities();
@@ -70,7 +73,8 @@ namespace Api.Controllers
         }
 
         // POST api/turmas
-        public void Post([FromBody] Model.Turma turma)
+        //Cria uma nova turma
+        public HttpResponseMessage Post([FromBody] Model.Turma turma)
         {
             _context = new data.MarlinBdEntities();
             data.Turma novaTurma = new data.Turma();
@@ -79,6 +83,8 @@ namespace Api.Controllers
             _context.Turma.Add(novaTurma);
 
             _context.SaveChanges();
+
+            return Request.CreateResponse(HttpStatusCode.OK, "Turma criada com sucesso!");
         }
 
         // PUT api/turmas/5
@@ -88,7 +94,8 @@ namespace Api.Controllers
         }
 
         // DELETE api/turmas/5
-        public void Delete(int id)
+        //Deleta uma turma caso ela nao tenha aluno
+        public HttpResponseMessage Delete(int id)
         {
             _context = new data.MarlinBdEntities();
 
@@ -96,15 +103,17 @@ namespace Api.Controllers
 
             if (id != turma.TurmaId)
             {
-                BadRequest();
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Turma nao encontrada");
             }
 
             if(turma.Aluno.Count != 0)
             {
-                BadRequest();
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Esta turma ainda possui alunos!");
             }
             _context.Turma.Remove(turma);
             _context.SaveChanges();
+
+            return Request.CreateResponse(HttpStatusCode.OK, "Turma excluida com sucesso!");
         }
     }
 }
