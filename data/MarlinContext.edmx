@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MarlinBdModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Aluno">
+          <Key>
+            <PropertyRef Name="AlunoId" />
+          </Key>
+          <Property Name="AlunoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Sobrenome" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Idade" Type="int" Nullable="false" />
+          <Property Name="TurmaId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Turma">
+          <Key>
+            <PropertyRef Name="TurmaId" />
+          </Key>
+          <Property Name="TurmaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NomeTurma" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Aluno_Turma">
+          <End Role="Turma" Type="Self.Turma" Multiplicity="1" />
+          <End Role="Aluno" Type="Self.Aluno" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Turma">
+              <PropertyRef Name="TurmaId" />
+            </Principal>
+            <Dependent Role="Aluno">
+              <PropertyRef Name="TurmaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MarlinBdModelStoreContainer">
+          <EntitySet Name="Aluno" EntityType="Self.Aluno" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Turma" EntityType="Self.Turma" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Aluno_Turma" Association="Self.FK_Aluno_Turma">
+            <End Role="Turma" EntitySet="Turma" />
+            <End Role="Aluno" EntitySet="Aluno" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MarlinBdModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Aluno">
+          <Key>
+            <PropertyRef Name="AlunoId" />
+          </Key>
+          <Property Name="AlunoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Sobrenome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Idade" Type="Int32" Nullable="false" />
+          <Property Name="TurmaId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Turma" Relationship="MarlinBdModel.FK_Aluno_Turma" FromRole="Aluno" ToRole="Turma" />
+        </EntityType>
+        <EntityContainer Name="MarlinBdEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Aluno" EntityType="Self.Aluno" />
+          <EntitySet Name="Turma" EntityType="MarlinBdModel.Turma" />
+          <AssociationSet Name="FK_Aluno_Turma" Association="MarlinBdModel.FK_Aluno_Turma">
+            <End Role="Turma" EntitySet="Turma" />
+            <End Role="Aluno" EntitySet="Aluno" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Turma">
+          <Key>
+            <PropertyRef Name="TurmaId" />
+          </Key>
+          <Property Name="TurmaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NomeTurma" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Aluno" Relationship="MarlinBdModel.FK_Aluno_Turma" FromRole="Turma" ToRole="Aluno" />
+        </EntityType>
+        <Association Name="FK_Aluno_Turma">
+          <End Type="MarlinBdModel.Turma" Role="Turma" Multiplicity="1" />
+          <End Type="MarlinBdModel.Aluno" Role="Aluno" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Turma">
+              <PropertyRef Name="TurmaId" />
+            </Principal>
+            <Dependent Role="Aluno">
+              <PropertyRef Name="TurmaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MarlinBdModelStoreContainer" CdmEntityContainer="MarlinBdEntities">
+          <EntitySetMapping Name="Aluno">
+            <EntityTypeMapping TypeName="MarlinBdModel.Aluno">
+              <MappingFragment StoreEntitySet="Aluno">
+                <ScalarProperty Name="AlunoId" ColumnName="AlunoId" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Sobrenome" ColumnName="Sobrenome" />
+                <ScalarProperty Name="Idade" ColumnName="Idade" />
+                <ScalarProperty Name="TurmaId" ColumnName="TurmaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Turma">
+            <EntityTypeMapping TypeName="MarlinBdModel.Turma">
+              <MappingFragment StoreEntitySet="Turma">
+                <ScalarProperty Name="NomeTurma" ColumnName="NomeTurma" />
+                <ScalarProperty Name="TurmaId" ColumnName="TurmaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
